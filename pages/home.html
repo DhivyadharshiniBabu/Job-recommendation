@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Job Recommendation</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background-image: url('/static/img1.jpg'); /* Background image */
+            background-size: cover; /* Cover the entire viewport */
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-top: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            font-size: 18px;
+            margin-top: 10px;
+        }
+
+        .input-container {
+            width: 90%;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 2px solid #17e0d9;
+            border-radius: 10px;
+            background-color: #0f0f0f;
+            color: #ffffff;
+            font-size: 16px;
+        }
+
+        input[type="text"] {
+            height: 40px;
+        }
+
+        textarea {
+            resize: none;
+            height: 120px;
+        }
+
+        input[type="submit"], .apply-button {
+            background: #17e0d9;
+            color: #fff;
+            font-weight: bold;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .apply-button {
+            margin: 10px 0;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+
+        /* Enhanced Container for Job Results */
+        #resultsContainer {
+            border: 2px solid #17e0d9;
+            border-radius: 10px;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.8);
+            margin: 0 auto;
+            width: 70%;
+        }
+
+        .job-listing {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 20px 0;
+            border-bottom: 2px solid #17e0d9;
+            padding-bottom: 10px;
+        }
+
+        .job-details {
+            flex: 2;
+            text-align: left;
+            padding: 10px;
+        }
+
+        .apply-button button {
+            background: #17e0d9;
+            color: #fff;
+            font-weight: bold;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Job Recommendation</h1>
+    
+    <!-- Visualization Button -->
+    <div class="apply-button">
+        <a href="{{ url_for('visualization') }}">
+            <button>View Visualizations</button>
+        </a>
+    </div>
+
+    <form method="POST">
+        <label for="user_skills">Enter your skills (comma-separated):</label>
+        <div class="input-container">
+            <input type="text" name="user_skills" id="user_skills" required placeholder="e.g., Java, Python, Web Development">
+        </div>
+        <label for="user_description">Enter your job description:</label>
+        <div class="input-container">
+            <textarea name="user_description" id="user_description" required placeholder="Tell us about your job and what you're looking for"></textarea>
+        </div>
+        <input type="submit" value="Find Suitable Jobs">
+    </form>
+    <h2>Results:</h2>
+    <div id="resultsContainer">
+        {% if results == "No suitable jobs found" %}
+            <p>{{ results }}</p>
+        {% elif results %}
+            {% for job in results %}
+                <div class="job-listing">
+                    <div class="job-details">
+                        <strong>Title:</strong><br>
+                        {{ job['title'] }}<br><br>
+                        <strong>Company:</strong><br>
+                        {{ job['company'] }}<br><br>
+                        <strong>Location:</strong><br>
+                        {{ job['location'] }}
+                    </div>
+                    <div class="apply-button">
+                        <a href="{{ url_for('hired', company=job['company'], title=job['title'], location=job['location']) }}">
+                            <button>APPLY JOB</button>
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</body>
+</html>

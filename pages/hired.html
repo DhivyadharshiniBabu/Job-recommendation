@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Congratulations</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background-color: #000000;
+            color: #fff;
+            overflow: hidden; /* Hides the overflowing elements */
+            position: relative; /* Needed for absolute positioning of confetti */
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-top: 20px;
+        }
+
+        p {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        .confetti {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0;
+        }
+
+        @keyframes shoot {
+            0% {
+                transform: translateY(0) rotate(45deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(800px) rotate(45deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Congratulations!</h1>
+    <p>You are hired by {{ company }} as a {{ title }} on {{ location }}.</p>
+
+    <script>
+        function createConfetti() {
+            const colors = ['#f00', '#0f0', '#00f',"#FFFE6F","#FF6C7C","#FF8EF3","#FFD700","#C0C0C0"]; // Define colors for confetti
+
+            const confetti = document.createElement('div');
+            confetti.classList.add('confetti');
+            confetti.style.width = '20px';
+            confetti.style.height = '20px';
+            confetti.style.position = 'absolute';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.top = '0';
+            confetti.style.left = Math.random() * 100 + 'vw'; // Randomize horizontal position
+            document.body.appendChild(confetti);
+
+            // Use the shoot animation
+            confetti.style.animation = 'shoot 3s linear forwards';
+
+            // Remove the confetti after the animation ends
+            confetti.addEventListener('animationend', () => {
+                confetti.remove();
+            });
+        }
+
+        // Create confetti at intervals
+        const interval = setInterval(createConfetti, 100);
+
+        // Stop creating confetti after some time (e.g., 5 seconds)
+        setTimeout(() => {
+            clearInterval(interval);
+        }, 15000);
+    </script>
+</body>
+</html>
